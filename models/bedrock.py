@@ -6,32 +6,27 @@ from models import Model
 from utils.secrets import read_secret
 
 from langchain_aws.embeddings.bedrock import BedrockEmbeddings
-from langchain_aws.llms.bedrock import BedrockLLM
-
+from langchain_aws import ChatBedrock
 
 class Bedrock(Model):
 
     def __init__(self) -> None:
         super().__init__()
-        key = os.environ.get("AWS_ACCESS_KEY_ID", read_secret("aws-key"))
-        sec = os.environ.get("AWS_SECRET_ACCESS_KEY", read_secret("aws-secret"))
         self.__embedding_model = os.environ.get(
-            "AWS_EMBEDDING_MODEL", "amazon.titan-embed-text-v1"
+            "AWS_EMBEDDING_MODEL", "amazon.titan-embed-text-v2:0"
         )
-        self.__model = os.environ.get("AWS_MODEL", "amazon.titan-text-lite-v1")
+        self.__model = os.environ.get("AWS_MODEL", "anthropic.claude-3-5-haiku-20241022-v1:0")
         self.__guardrail_id = os.environ.get("AWS_GUARDRAIL_ID", "")
 
         self.__client = boto3.client(
             "bedrock-runtime",
-            region_name=os.environ.get("AWS_DEFAULT_REGION", "eu-central-1"),
-            aws_access_key_id=key,
-            aws_secret_access_key=sec,
+            region_name=os.environ.get("AWS_DEFAULT_REGION", "us-west-2")
         )
         self.__langchain_embedding = BedrockEmbeddings(
             client=self.__client,
             model_id=self.__embedding_model,
         )
-        self.__langchain_llm = BedrockLLM(
+        self.__langchain_llm = ChatBedrock(
             client=self.__client,
             model_id=self.__model,
         )
