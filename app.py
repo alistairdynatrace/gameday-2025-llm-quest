@@ -113,13 +113,37 @@ def submit_workflow(prompt: str, pipeline: str, span: trace.Span):
 @app.get("/api/v1/thumbsUp")
 @otel_tracer.start_as_current_span("/api/v1/thumbsUp")
 def thumbs_up(prompt: str):
-    logger.info(f"Positive user feedback for search term: {prompt}")
+    """Record positive feedback for a given prompt.
+
+    Adds the prompt and sentiment as span attributes for observability.
+    """
+    span = trace.get_current_span()
+    if prompt:
+        span.set_attribute("feedback.prompt", prompt)
+        span.set_attribute("feedback.sentiment", "positive")
+        logger.info(f"Positive user feedback for search term: {prompt}")
+        return format_message("Feedback recorded: positive")
+    else:
+        span.set_status(trace.status.StatusCode.ERROR, "Empty prompt in thumbsUp")
+        return format_message("No prompt provided")
 
 
 @app.get("/api/v1/thumbsDown")
 @otel_tracer.start_as_current_span("/api/v1/thumbsDown")
 def thumbs_down(prompt: str):
-    logger.info(f"Negative user feedback for search term: {prompt}")
+    """Record negative feedback for a given prompt.
+
+    Adds the prompt and sentiment as span attributes for observability.
+    """
+    span = trace.get_current_span()
+    if prompt:
+        span.set_attribute("feedback.prompt", prompt)
+        span.set_attribute("feedback.sentiment", "negative")
+        logger.info(f"Negative user feedback for search term: {prompt}")
+        return format_message("Feedback recorded: negative")
+    else:
+        span.set_status(trace.status.StatusCode.ERROR, "Empty prompt in thumbsDown")
+        return format_message("No prompt provided")
 
 
 if __name__ == "__main__":
