@@ -3,7 +3,7 @@ from models.bedrock import Bedrock
 
 from pipeline import Pipeline
 from tools.movie_sentence import movie_quote
-from tools.travel_advice import travel_advice
+from tools.kb_travel_advice import kb_travel_advice
 from tools.valid_city import valid_city
 
 from langchain.agents import AgentExecutor, create_structured_chat_agent
@@ -15,7 +15,7 @@ from utils import format_message
 
 class Agentic(Pipeline):
 
-    tools = [valid_city, travel_advice, movie_quote]
+    tools = [valid_city, kb_travel_advice, movie_quote]
 
     __system = """Respond to the human as helpfully and accurately as possible. You have access to the following tools:
 
