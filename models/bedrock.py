@@ -6,7 +6,9 @@ from models import Model
 from utils.secrets import read_secret
 
 from langchain_aws.embeddings.bedrock import BedrockEmbeddings
+# from langchain_aws.llms.bedrock import BedrockLLM
 from langchain_aws import ChatBedrock
+from botocore.credentials import InstanceMetadataProvider, InstanceMetadataFetcher
 
 class Bedrock(Model):
 
@@ -15,12 +17,12 @@ class Bedrock(Model):
         self.__embedding_model = os.environ.get(
             "AWS_EMBEDDING_MODEL", "amazon.titan-embed-text-v2:0"
         )
-        self.__model = os.environ.get("AWS_MODEL", "anthropic.claude-3-5-haiku-20241022-v1:0")
+        self.__model = os.environ.get("AWS_MODEL", "us.anthropic.claude-3-7-sonnet-20250219-v1:0")
         self.__guardrail_id = os.environ.get("AWS_GUARDRAIL_ID", "")
 
         self.__client = boto3.client(
             "bedrock-runtime",
-            region_name=os.environ.get("AWS_DEFAULT_REGION", "us-west-2")
+            region_name="us-east-1"
         )
         self.__langchain_embedding = BedrockEmbeddings(
             client=self.__client,

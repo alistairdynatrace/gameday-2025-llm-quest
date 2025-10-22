@@ -88,7 +88,7 @@ Begin! Reminder to ALWAYS respond with a valid json blob of a single action. Use
         )
 
     def start(self, model: Model, prompt: str) -> object:
-        task = f"if {prompt} is a valid city, provide a travel advice. Otherwise, provide an explanation on why you cannot answer."
+        task = f"if {prompt} is a valid city, provide a travel advice. Otherwise, provide an explanation on why you cannot answer. If you can not answer, always start your response with the words 'I'm sorry'"
         # chat_history = self.memory.buffer_as_messages
         response = self.agent_executor.invoke(
             {

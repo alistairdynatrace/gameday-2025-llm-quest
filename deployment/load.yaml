@@ -23,7 +23,7 @@ data:
     };
     
     export default function () {
-        const cities = ['sydney', 'bali', 'new york', 'tokyo', 'chicago', 'london', 'berlin', 'rome', 'amsterdam', 'bangkok'];
+        const cities = ['apollo city', 'crater royale', 'dark side palace', 'lunar vegas', 'monte carlo crater'];
         const city = randomItem(cities);
         const url = `http://travel-advisor.travel-advisor.svc.cluster.local:80/api/v1/completion?prompt=${city}`;
         console.log(url);
